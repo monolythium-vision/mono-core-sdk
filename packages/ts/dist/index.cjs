@@ -7,7 +7,7 @@ var bip39 = require('@scure/bip39');
 var english_js = require('@scure/bip39/wordlists/english.js');
 
 // src/version.ts
-var version = "0.6.9";
+var version = "0.6.10";
 
 // src/error.ts
 var SdkError = class _SdkError extends Error {
@@ -3136,6 +3136,7 @@ var TESTNET_69420 = {
   rpc: [
     {
       url: "https://rpc.monolythium.com",
+      ws_url: "wss://rpc.monolythium.com/ws",
       provider: "monolythium-foundation",
       tier: "official",
       notes: "canonical native-PQ-terminating public RPC gateway"
