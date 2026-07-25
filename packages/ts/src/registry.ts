@@ -82,6 +82,7 @@ export const TESTNET_69420: ChainInfo = {
   rpc: [
     {
       url: "https://rpc.monolythium.com",
+      ws_url: "wss://rpc.monolythium.com/ws",
       provider: "monolythium-foundation",
       tier: "official",
       notes: "canonical native-PQ-terminating public RPC gateway",

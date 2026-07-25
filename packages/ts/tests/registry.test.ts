@@ -22,6 +22,7 @@ binary_sha   = "44a9ec4"
 
 [[rpc]]
 url      = "https://rpc.monolythium.com"
+ws_url   = "wss://rpc.monolythium.com/ws"
 provider = "monolythium"
 tier     = "official"
 
@@ -41,6 +42,9 @@ describe("chain registry snapshot", () => {
     expect(getRpcEndpoints("testnet-69420").map((r) => r.url)).toEqual([
       "https://rpc.monolythium.com",
     ]);
+    expect(getRpcEndpoints("testnet-69420")[0]?.ws_url).toBe(
+      "wss://rpc.monolythium.com/ws",
+    );
 
     const seeds = getP2pSeeds("testnet-69420");
     expect(seeds).toHaveLength(42);
@@ -88,6 +92,7 @@ describe("chain registry snapshot", () => {
     expect(parsed.network).toBe("testnet-69420");
     expect(parsed.rpc[0]).toMatchObject({
       url: "https://rpc.monolythium.com",
+      ws_url: "wss://rpc.monolythium.com/ws",
       provider: "monolythium",
       tier: "official",
     });
