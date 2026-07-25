@@ -30,32 +30,30 @@ multiaddr = "/dns4/p2p.monolythium.com/tcp/29898/p2p/12D3KooWDKk9ALxqchazXGcRGbq
 `;
 
 describe("chain registry snapshot", () => {
-  it("vendors the V15 relay-first public testnet endpoints", () => {
+  it("vendors the accepted Posture-C V16 R5 public testnet", () => {
     expect(TESTNET_69420.chain_id).toBe(69420);
     expect(TESTNET_69420.genesis_hash).toBe(
-      "0xbf09dc062e1a3ce71e4fbe5833d1ebe546cce5c9dcbd4de3ee0c693690661666",
+      "0x8dfc309dfe8e35b4ca036631c7dc25b29e618ac8a9694e0e2bbe23d0f98ab1fe",
     );
     expect(TESTNET_69420.binary_sha).toBe(
-      "6d3ab40b8c3d0680242526bc0cb9d221e1055694",
+      "f052832c62ad5640fa7a419018bba4b120a18587",
     );
     expect(getRpcEndpoints("testnet-69420").map((r) => r.url)).toEqual([
-      "http://178.105.45.210:8545",
-      "http://65.21.252.34:8545",
       "https://rpc.monolythium.com",
     ]);
 
     const seeds = getP2pSeeds("testnet-69420");
     expect(seeds).toHaveLength(42);
     expect(seeds.slice(0, 3).map((seed) => seed.multiaddr)).toEqual([
-      "/ip4/178.105.45.210/tcp/29898/p2p/12D3KooWBwRRSV5SqbFfNfio4hE7tofNkYXwihAwedKo9gV1kT7e",
-      "/ip4/65.21.252.34/tcp/29898/p2p/12D3KooWGFQs3NNG8b4x8Sr5yEEFAEjtW3bo3y812f23jPduTp8e",
-      "/ip4/5.78.236.250/tcp/29898/p2p/12D3KooWCwpUuYz9Z2S4Tx1Tv9c1TDBahqf1FYThAxTvo4FcyC6K",
+      "/ip4/178.105.45.210/tcp/29898/p2p/12D3KooWNwaWFMBCD55D9VoAF7nxva7H8pKzmLcDW7HCKmxbB7Qb",
+      "/ip4/65.21.252.34/tcp/29898/p2p/12D3KooWAyeb3mC1q6UL7rTwnJPaZV6fVS3sV6wGNZwVGfaF1UNX",
+      "/ip4/5.78.236.250/tcp/29898/p2p/12D3KooWNYwbXvkpNLxnJkWVGLm3HX6nRpsZTqzRxUfVMXBALPFe",
     ]);
   });
 
   it("constructs a client from the first registry endpoint without probing", async () => {
     const client = await RpcClient.forNetwork("testnet-69420");
-    expect(client.endpoint).toBe("http://178.105.45.210:8545");
+    expect(client.endpoint).toBe("https://rpc.monolythium.com");
   });
 
   it("probes endpoints until one answers with the expected chain id", async () => {
