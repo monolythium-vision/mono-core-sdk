@@ -9,7 +9,15 @@ export const ML_DSA_65_SIGNING_KEY_LEN = 4032;
 export const ML_DSA_65_PUBLIC_KEY_LEN = 1952;
 export const ML_DSA_65_SIGNATURE_LEN = 3309;
 export const STANDARD_ALGO_NUMBER_ML_DSA_65 = 1001;
-export const ENUM_VARIANT_INDEX_ML_DSA_65 = 3;
+// Bincode enum-variant index of ML-DSA-65 in the on-wire `PublicKey` /
+// `Signature` enums. MUST equal the Rust declaration-order index: ML-DSA-65 is
+// declared first, so it is variant 0 (MlDsa87=1, Falcon512=2, Falcon1024=3).
+// mono-core pins this in `crypto/tests/wire_format_variant_order.rs`
+// (`ml_dsa_65_is_wire_variant_zero`). It was 3 while the classical variants
+// preceded it; those were deleted, shifting ML-DSA-65 to 0 — a stale 3 makes
+// the fleet decode every ML-DSA-65 envelope as Falcon1024 and fail closed with
+// PqNotImplemented, so no TS-produced transaction can be admitted.
+export const ENUM_VARIANT_INDEX_ML_DSA_65 = 0;
 export const ADDRESS_DERIVATION_DOMAIN = "MONO_ADDRESS_BLAKE3_20_V1";
 
 const ADDRESS_DERIVATION_DOMAIN_BYTES = new TextEncoder().encode(ADDRESS_DERIVATION_DOMAIN);

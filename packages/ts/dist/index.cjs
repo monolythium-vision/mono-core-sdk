@@ -7,7 +7,7 @@ var bip39 = require('@scure/bip39');
 var english_js = require('@scure/bip39/wordlists/english.js');
 
 // src/version.ts
-var version = "0.6.10";
+var version = "0.6.11";
 
 // src/error.ts
 var SdkError = class _SdkError extends Error {
@@ -3027,7 +3027,7 @@ var ML_DSA_65_SIGNING_KEY_LEN = 4032;
 var ML_DSA_65_PUBLIC_KEY_LEN = 1952;
 var ML_DSA_65_SIGNATURE_LEN = 3309;
 var STANDARD_ALGO_NUMBER_ML_DSA_65 = 1001;
-var ENUM_VARIANT_INDEX_ML_DSA_65 = 3;
+var ENUM_VARIANT_INDEX_ML_DSA_65 = 0;
 var ADDRESS_DERIVATION_DOMAIN = "MONO_ADDRESS_BLAKE3_20_V1";
 var ADDRESS_DERIVATION_DOMAIN_BYTES = new TextEncoder().encode(ADDRESS_DERIVATION_DOMAIN);
 var MlDsa65Backend = class _MlDsa65Backend {

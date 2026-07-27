@@ -3,6 +3,7 @@ import { blake3 } from "@noble/hashes/blake3.js";
 import { keccak_256 } from "@noble/hashes/sha3.js";
 import {
   ADDRESS_DERIVATION_DOMAIN,
+  ENUM_VARIANT_INDEX_ML_DSA_65,
   ML_DSA_65_PUBLIC_KEY_LEN,
   ML_DSA_65_SEED_LEN,
   ML_DSA_65_SIGNATURE_LEN,
@@ -136,7 +137,10 @@ describe("crypto subpath", () => {
       new Uint8Array(ML_DSA_65_SIGNATURE_LEN).fill(0x55),
       new Uint8Array(ML_DSA_65_PUBLIC_KEY_LEN).fill(0x66),
     );
-    expect(bytesToHex(wire)).toContain("000000000000000001000000000000003001000000000000000103000000");
+    // Tail groups: extensions-len(1) | ext kind 0x30 | body-len(1) | body 0x01 |
+    // signature opaque variant tag = 0 (ML-DSA-65). Previously baked in the
+    // buggy variant 3; corrected to 0 to match the Rust wire order (#43).
+    expect(bytesToHex(wire)).toContain("000000000000000001000000000000003001000000000000000100000000");
   });
 
   it("matches the Rust MRV native transaction golden vector", () => {
@@ -153,6 +157,29 @@ describe("crypto subpath", () => {
     expect(wire).toHaveLength(MRV_NATIVE_TX_VECTOR.wireLen);
     expect(bytesToHex(wire.slice(0, 160))).toBe(MRV_NATIVE_TX_VECTOR.wirePrefix);
     expect(bytesToHex(wire.slice(-80))).toBe(MRV_NATIVE_TX_VECTOR.wireSuffix);
+  });
+
+  it("writes ML-DSA-65 at bincode wire variant 0 in the signed-tx witness (regression: #43)", () => {
+    // ML-DSA-65 is variant 0 in the Rust `PublicKey`/`Signature` enums; a stale
+    // 3 decodes as Falcon1024 and fails closed with PqNotImplemented, so no
+    // TS-produced transaction can be admitted. The golden prefix/suffix above
+    // do NOT cover the two opaque variant tags, so this asserts them directly.
+    expect(ENUM_VARIANT_INDEX_ML_DSA_65).toBe(0);
+    const wire = bincodeSignedTransaction(
+      MRV_NATIVE_TX_VECTOR.fields,
+      new Uint8Array(ML_DSA_65_SIGNATURE_LEN).fill(0x55),
+      new Uint8Array(ML_DSA_65_PUBLIC_KEY_LEN).fill(0x66),
+    );
+    const OPAQUE_HEADER = 4 + 2 + 8; // u32 variant | u16 algo id | u64 byte-len
+    const pkStart = wire.length - (OPAQUE_HEADER + ML_DSA_65_PUBLIC_KEY_LEN);
+    const sigStart = pkStart - (OPAQUE_HEADER + ML_DSA_65_SIGNATURE_LEN);
+    const u32le = (a: Uint8Array, o: number) =>
+      (a[o] | (a[o + 1] << 8) | (a[o + 2] << 16) | (a[o + 3] << 24)) >>> 0;
+    expect(u32le(wire, sigStart)).toBe(0); // signature opaque variant tag
+    expect(u32le(wire, pkStart)).toBe(0); // public-key opaque variant tag
+    // the StandardAlgo id (MlDsa65 = 1001) still follows each variant tag
+    expect(wire[sigStart + 4] | (wire[sigStart + 5] << 8)).toBe(STANDARD_ALGO_NUMBER_ML_DSA_65);
+    expect(wire[pkStart + 4] | (wire[pkStart + 5] << 8)).toBe(STANDARD_ALGO_NUMBER_ML_DSA_65);
   });
 
 });
