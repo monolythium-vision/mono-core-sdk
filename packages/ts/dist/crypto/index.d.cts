@@ -1,5 +1,5 @@
-import { a as MlDsa65Backend, N as NativeEvmTxFields } from '../ml-dsa-Drcmrw5h.cjs';
-export { A as ADDRESS_DERIVATION_DOMAIN, E as ENUM_VARIANT_INDEX_ML_DSA_65, b as ML_DSA_65_PUBLIC_KEY_LEN, c as ML_DSA_65_SEED_LEN, d as ML_DSA_65_SIGNATURE_LEN, e as ML_DSA_65_SIGNING_KEY_LEN, M as MempoolClass, f as NativeTxExtension, g as NativeTxExtensionDescriptor, h as NativeTxExtensionLike, S as STANDARD_ALGO_NUMBER_ML_DSA_65, i as bincodeSignedTransaction, j as encodeMlDsa65Opaque, k as encodeTransactionForHash, m as mlDsa65AddressBytes, l as mlDsa65AddressFromPublicKey } from '../ml-dsa-Drcmrw5h.cjs';
+import { a as MlDsa65Backend, N as NativeEvmTxFields } from '../ml-dsa-BHyMuAX9.cjs';
+export { A as ADDRESS_DERIVATION_DOMAIN, E as ENUM_VARIANT_INDEX_ML_DSA_65, b as ML_DSA_65_PUBLIC_KEY_LEN, c as ML_DSA_65_SEED_LEN, d as ML_DSA_65_SIGNATURE_LEN, e as ML_DSA_65_SIGNING_KEY_LEN, M as MempoolClass, f as NativeTxExtension, g as NativeTxExtensionDescriptor, h as NativeTxExtensionLike, S as STANDARD_ALGO_NUMBER_ML_DSA_65, i as bincodeSignedTransaction, j as encodeMlDsa65Opaque, k as encodeTransactionForHash, m as mlDsa65AddressBytes, l as mlDsa65AddressFromPublicKey } from '../ml-dsa-BHyMuAX9.cjs';
 
 declare class BincodeWriter {
     #private;
